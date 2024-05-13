@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Noto_Sans_Thai } from 'next/font/google'
 import React, { useState, useEffect } from 'react';
-import { ArrowPathIcon, CloudArrowUpIcon, ArrowUpIcon, ArrowTrendingDownIcon, FingerPrintIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { ArrowUpIcon, ArrowDownIcon, HashtagIcon } from '@heroicons/react/24/outline'
 
 const notoSansThai = Noto_Sans_Thai({ subsets: ['latin'] })
 
@@ -28,11 +28,11 @@ interface ProductCurrentPrice {
           previousPrice: number;
           promotionList?: [
             {
-              order: number;
+              order: string;
               description: string;
               addonPrice: number;
               startDate: string;
-              EndDate: string;
+              endDate: string;
               status: string;
             }
           ]
@@ -58,7 +58,7 @@ export default function Home() {
     fetchData();
   }, [])
 
-  console.log(typeof productData?.productPriceChange.changeDate)
+  // console.log(productData?.productCategories)
 
 
   const [date, setDate] = useState(new Date());
@@ -104,30 +104,58 @@ export default function Home() {
         </div>
       )}
 
-      <div className="bg-white sm:py-20">
+      <div className="bg-white sm:py-10">
         {productData?.productCategories.filter((category) => category.status == "Active").map((category) => (
-          <div key={category.id} className="mx-auto max-w-7xl px-6 lg:px-8 pb-20">
+          <div key={category.id} className="mx-auto mb-4 max-w-7xl px-6 lg:px-8 py-10 ">
             <div className="mx-auto max-w-2xl lg:text-center">
               <h2 className="text-2xl font-semibold leading-7 text-indigo-600">{category.name}</h2>
 
             </div>
-            <div className="mx-auto mt-8 max-w-2xl sm:mt-10 lg:mt-14 lg:max-w-4xl">
-              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+            <div className="mx-auto mt-8 max-w-2xl sm:mt-10 lg:mt-14 lg:max-w-4xl ">
+              <dl className="grid max-w-xl grid-cols-1 gap-x-4 gap-y-4 lg:max-w-none lg:grid-cols-2 ">
                 {category.productList.map((product) => (
-                  <div key={product.name} className="relative pl-16">
-                    <dt className="text-base font-semibold leading-7 text-gray-900">
-                      {(product.changedPrice - product.previousPrice) > 0 &&
-                        <div className="absolute left-0 top-0 flex h-14 w-14 items-center justify-center rounded-lg text-white bg-green-500">
-                          {/* <ArrowUpIcon className="h-6 w-6 text-white" aria-hidden="true" /> */}
-                          <p> +{(product.changedPrice - product.previousPrice).toFixed(2)}</p>
-                        </div>}
-                      {(product.changedPrice - product.previousPrice) < 0 &&
-                        <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-red-500">
-                          <ArrowUpIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                        </div>}
-                      {product.name}
+                  // <div key={product.name} className="relative pl-16 ">
+                  <div key={product.name} className="relative  border-2 rounded-lg p-6  ">
+                    <dt className="text-base font-semibold leading-7 text-gray-900 ">
+                      <div className='flex justify-between'>
+                        <div>
+                          {product.name}
+                        </div>
+                        {(product.changedPrice - product.previousPrice) > 0 &&
+                          <div className="flex items-center justify-center align-middle rounded-lg text-green-500">
+                            <ArrowUpIcon className="h-4 w-4" aria-hidden="true" /> &nbsp;
+                            {product.price.toFixed(2)}
+
+                          </div>}
+                        {(product.changedPrice - product.previousPrice) < 0 &&
+                          <div className="flex items-center justify-center align-middle rounded-lg text-red-500">
+                            <ArrowDownIcon className="h-4 w-4" aria-hidden="true" /> &nbsp;
+                            {product.price.toFixed(2)}
+                          </div>}
+                        {(product.changedPrice - product.previousPrice) == 0 &&
+                          <div className="flex items-center justify-center align-middle rounded-lg ">
+                            {product.price.toFixed(2)}
+                          </div>}
+
+                      </div>
+
                     </dt>
-                    <dd className="mt-2 text-base leading-7 text-gray-600">{product.description}</dd>
+                    {product.promotionList?.map((promotion) => (
+
+                      <dd key={promotion.order} className="mt-2 text-base leading-7 flex justify-between text-gray-600">
+
+                        <div className='flex items-center justify-center align-middle'>
+                          <HashtagIcon className="h-4 w-4 pr-1" aria-hidden="true" />
+                          {promotion.description}
+                        </div>
+                        {promotion.addonPrice != 0 &&
+                          <div>
+                            {(product.price + promotion.addonPrice).toFixed(2)}
+                          </div>
+                        }
+
+                      </dd>
+                    ))}
                   </div>
                 ))}
               </dl>
