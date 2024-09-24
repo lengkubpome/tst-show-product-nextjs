@@ -43,7 +43,7 @@ interface ProductCurrentPrice {
   ]
 }
 
-const productDataAPI = "https://script.google.com/macros/s/AKfycbwiEL2ia3zp0R_jahDP5BW8612oQ4K2UcDoiLNOoZXlOMiOSBSJ2WqCVoo1Kz16GiRt/exec"
+const productDataAPI = "https://script.google.com/macros/s/AKfycbzCq-Tq86OCO_dyTwqA2kiyNkxpLAkBYdDPOoF-ytmxJQHoYyBHhSvooFTOWil8AJXR/exec"
 export default function Home() {
 
   const [productData, setProductData] = useState<ProductCurrentPrice>();
